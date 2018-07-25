@@ -7,12 +7,10 @@ var appOptions = {
 
 var app = https.createServer(appOptions);
 
-var io = require('socket.io')(app);
-
-/*var io = require('socket.io')({
+var io = require('socket.io')({
 	transports: ['websocket'],
 });
-io.attach(4567);*/
+io.attach(4567);
 
 app.listen(4000);
 
