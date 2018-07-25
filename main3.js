@@ -1,8 +1,18 @@
+var fs = require('fs');
+var https = require('https');
+
+var appOptions = {
+    pfx: fs.readFileSync('XXXXYYYYXXXXYYYY.pfx'), passphrase: 'XXXXXXXXXX'
+};
+
+var app = https.createServer(appOptions);
+
 var io = require('socket.io')({
 	transports: ['websocket'],
 });
 io.attach(4567);
 
+app.listen(4000);
 
 
 var clients = {};
