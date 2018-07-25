@@ -2,7 +2,7 @@ var fs = require('fs');
 var https = require('https');
 
 var appOptions = {
-    pfx: fs.readFileSync('XXXXYYYYXXXXYYYY.pfx'), passphrase: 'XXXXXXXXXX'
+
 };
 
 var app = https.createServer(appOptions);
