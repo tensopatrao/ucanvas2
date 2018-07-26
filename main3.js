@@ -12,7 +12,7 @@ var options= {
 
 https.createServer(options,function (req, res) {
   // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:443');
 	
 	 // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'https://launch.playcanvas.com:443'); 
@@ -27,8 +27,6 @@ https.createServer(options,function (req, res) {
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    // Pass to next layer of middleware
-    next();
 }).listen(443);
 
 
