@@ -10,7 +10,7 @@ var options= {
 	cert: fs.readFileSync('/opt/ucanvas2/ucanvas_io.crt')
 };
 
-https.createServer(options,function (req, res) {
+var server = https.createServer(options,function (req, res) {
   // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:443');
 	
@@ -30,13 +30,15 @@ https.createServer(options,function (req, res) {
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-}).listen(443);
+});
+
+server.listen(443);
 
 
 var io = require('socket.io')({
 	transports: ['websocket'],
 });
-io.attach(4568);
+io.listen(server);
 
 
 var clients = {};
