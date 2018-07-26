@@ -1,8 +1,25 @@
+const hostname='<ucanvas.io>';
+const port='<443>';
+
+var https = require('https');
+var fs = require("fs");
+
+var options= {
+	ca: fs.readFileSync('/opt/ucanvas2/ucanvas_io.ca-bundle'),
+	key: fs.readFileSync('/opt/ucanvas2/ucanvas.key'),
+	cert: fs.readFileSync('/opt/ucanvas2/ucanvas_io.crt')
+};
+
+https.createServer(options,function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(8000);
+
+
 var io = require('socket.io')({
 	transports: ['websocket'],
 });
 io.attach(4568);
-
 
 
 var clients = {};
