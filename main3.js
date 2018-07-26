@@ -1,18 +1,8 @@
-var fs = require('fs');
-var https = require('https');
-
-var appOptions = {
-
-};
-
-var app = https.createServer(appOptions);
-
 var io = require('socket.io')({
 	transports: ['websocket'],
 });
-io.attach(4567);
+io.attach(4568);
 
-app.listen(4000);
 
 
 var clients = {};
