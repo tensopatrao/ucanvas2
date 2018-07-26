@@ -16,6 +16,9 @@ https.createServer(options,function (req, res) {
 	
 	 // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'https://launch.playcanvas.com:443'); 
+	
+	// Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'https://launch.playcanvas.com:4568'); 
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
