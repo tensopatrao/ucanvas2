@@ -196,7 +196,7 @@ function setPackageValue(value, id){
 	var yz = id.split(",");
 	var i=0;
 	for(var cc in yz) {
-  		setPackageValue2(cc,yz[i]);
+  		setPackageValue2(xy[i],cc);
 		i++;
   	}
 	//console.log(packageVectors);
