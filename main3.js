@@ -186,8 +186,19 @@ function addPackageValue(id){
 	packageVectors.push(id);
 }
 
-function setPackageValue(value, id){
+function setPackageValue2(value, id){
 	packageVectors[id]=value;
+	//console.log(packageVectors);
+}
+
+function setPackageValue(value, id){
+	var xy = value.split(",");
+	var yz = id.split(",");
+	var i=0;
+	for(var cc in yz) {
+  		setPackageValue2(cc,yz[i]);
+		i++;
+  	}
 	//console.log(packageVectors);
 }
 
