@@ -48,7 +48,7 @@ var APP = {
 			scene.add( light );
 			
 			var loader = new THREE.FBXLoader();
-				loader.load( 'models/LORI_BOD.fbx', function ( object ) {
+				loader.load( 'app/models/LORI_BOD.fbx', function ( object ) {
 					object.mixer = new THREE.AnimationMixer( object );
 					mixers.push( object.mixer );
 					var action = object.mixer.clipAction( object.animations[ 0 ] );
