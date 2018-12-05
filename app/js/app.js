@@ -146,33 +146,13 @@ var APP = {
 
 			prevTime = performance.now();
 
-			document.addEventListener( 'keydown', onDocumentKeyDown );
-			document.addEventListener( 'keyup', onDocumentKeyUp );
-			document.addEventListener( 'mousedown', onDocumentMouseDown );
-			document.addEventListener( 'mouseup', onDocumentMouseUp );
-			document.addEventListener( 'mousemove', onDocumentMouseMove );
-			document.addEventListener( 'touchstart', onDocumentTouchStart );
-			document.addEventListener( 'touchend', onDocumentTouchEnd );
-			document.addEventListener( 'touchmove', onDocumentTouchMove );
-
-			dispatch( events.start, arguments );
-
 			renderer.setAnimationLoop( animate );
 
 		};
 
 		this.stop = function () {
 
-			document.removeEventListener( 'keydown', onDocumentKeyDown );
-			document.removeEventListener( 'keyup', onDocumentKeyUp );
-			document.removeEventListener( 'mousedown', onDocumentMouseDown );
-			document.removeEventListener( 'mouseup', onDocumentMouseUp );
-			document.removeEventListener( 'mousemove', onDocumentMouseMove );
-			document.removeEventListener( 'touchstart', onDocumentTouchStart );
-			document.removeEventListener( 'touchend', onDocumentTouchEnd );
-			document.removeEventListener( 'touchmove', onDocumentTouchMove );
-
-			dispatch( events.stop, arguments );
+			
 
 			renderer.setAnimationLoop( null );
 
