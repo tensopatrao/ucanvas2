@@ -1,6 +1,4 @@
-/**
- * @author mrdoob / http://mrdoob.com/
- */
+
 
 var APP = {
 
@@ -11,6 +9,8 @@ var APP = {
 		var camera, scene, renderer, light;
 		var clock = new THREE.Clock();
 		var mixers = [];
+		
+		var container;
 
 		var events = {};
 
@@ -26,6 +26,9 @@ var APP = {
 			if ( WEBGL.isWebGLAvailable() === false ) {
 				document.body.appendChild( WEBGL.getWebGLErrorMessage() );
 			}
+			
+			container = document.createElement( 'div' );
+			document.body.appendChild( container );
 
 			renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setClearColor( 0x000000 );
@@ -62,7 +65,7 @@ var APP = {
 					scene.add( object );
 				} );
 			
-			dom.appendChild( renderer.domElement );
+			container.appendChild( renderer.domElement );
 
 
 		};
