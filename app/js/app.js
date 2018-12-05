@@ -112,11 +112,7 @@ var APP = {
 
 		function dispatch( array, event ) {
 
-			for ( var i = 0, l = array.length; i < l; i ++ ) {
 
-				array[ i ]( event );
-
-			}
 
 		}
 
