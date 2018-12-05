@@ -1,4 +1,4 @@
-const hostname='ucanvas.io';
+﻿const hostname='ucanvas.io';
 const port=443;
 
 var https = require('https');
@@ -201,4 +201,3 @@ function setPackageValue(value, id){
   	}
 	//console.log(packageVectors);
 }
-
