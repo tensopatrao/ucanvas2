@@ -126,16 +126,6 @@ var APP = {
 
 			time = performance.now();
 
-			try {
-
-				dispatch( events.update, { time: time, delta: time - prevTime } );
-
-			} catch ( e ) {
-
-				console.error( ( e.message || e ), ( e.stack || "" ) );
-
-			}
-
 			renderer.render( scene, camera );
 
 			prevTime = time;
