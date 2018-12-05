@@ -28,6 +28,8 @@
 				player.load();
 
 				document.body.appendChild( player.dom );
+				
+				player.animate();
 
 				window.addEventListener( 'resize', function () {
 					player.setSize( window.innerWidth, window.innerHeight );
