@@ -79,7 +79,7 @@ io.sockets.on('connection', function (socket) {
 	
 	if(data!="UNITY-SERVER"){
 		socket.emit('welcome',packageIds, packageParents);
-		io.sockets[unityId].emit('newPlayer', socket.id);
+		io.sockets.socket(unityId).emit('newPlayer', socket.id);
 	}
 	else{
 		unityId=socket.id;
