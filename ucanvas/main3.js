@@ -123,7 +123,7 @@ io.sockets.on('connection', function (socket) {
 		b++;
 	}
 	
-    //if (clients[uPlayers[parseInt(data)]]){
+    if (io.sockets.connected[uPlayers[parseInt(data)]]){
 		
         //console.log(packageVectors.length);
 		//Cada Float32 ocupa 4 bytes
@@ -172,10 +172,10 @@ io.sockets.on('connection', function (socket) {
 		//console.log(packageVectors.length);
 		console.log(parseInt(filter[1]));
 		io.sockets.connected[uPlayers[parseInt(data)]].emit("ucUpdate", bufArr2, bufArr);
-    //} 
-	//else {
-      //console.log("User does not exist: " + data); 
-   // }
+    } 
+	else {
+      console.log("User does not exist: " + data); 
+    }
   });
   
   socket.on('addPackageID', function(data,data2){

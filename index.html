@@ -78,6 +78,7 @@
 				uc.values=bufView2;
 				uc.wait4server=false;
 				uc.connected=true;
+				console.log("entrou");
 			});
 			
 			socket.on ('playerJoined', function (data) { //Server Update
@@ -300,7 +301,7 @@
                                 var geometry = new THREE.BoxGeometry( 100, 100, 100 );
 								var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 								myEntity = new THREE.Mesh( geometry, material );
-								myEntity.visible=false;
+								//myEntity.visible=false;
 								
 								
                         }
