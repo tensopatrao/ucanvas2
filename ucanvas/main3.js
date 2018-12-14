@@ -66,9 +66,10 @@ io.sockets.on('connection', function (socket) {
 	uPlayers+=1;
     clients[data] = {
       "socket": socket.id,
-	  "username": data + uPlayers
+	  "username": data
     };
-	socket.username=data;
+	if(data!="UNITY-SERVER"){socket.username=data + uPlayers;}
+	else{socket.username=data;}
 	socket.room = 'Lobby';
     socket.join('Lobby');
 	//io.sockets["in"]('Lobby').emit('updatechat', updatechatMsg('System', 'System', username + ' have connected to Lobby'));
