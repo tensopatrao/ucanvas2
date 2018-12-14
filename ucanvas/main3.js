@@ -97,6 +97,12 @@ io.sockets.on('connection', function (socket) {
 	  uPlayers[parseInt(data2)]=data;
   });
   
+  
+  socket.on('playerJoined', function(data,data2){
+	  io.sockets.connected[parseInt(data)].emit('playerJoined', data2);
+  });
+  
+  
   socket.on('ucUpdate', function(data){
 	
 	//PACKAGE FORMAT: ID,POSX,POSY,POSZ,ROTX,ROTY,ROTZ,SCLX,SCLY,SCLZ | ID2,POSX2,POSY2,POSZ2,ROTX2,....
