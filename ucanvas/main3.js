@@ -133,38 +133,40 @@ io.sockets.on('connection', function (socket) {
         var bufView2 = new Uint16Array(bufArr2);
 		
         var i = 0;
-		
+		var e = 0;
 
 		
-        while(i<packageIds.length){
+        while(e<packageIds.length){
             //var xyz = players[i].split(",");
-				if(parseInt(filter[i])===1){
+				if(parseInt(filter[e])===1){
 				//ID
 				
 				//bufView2[i]=parseInt(packageIds[i].substring(0,4));
-				bufView2[i]=i;
+				bufView2[i]=e;
 				//console.log(parseInt(packageIds[i].substring(0,4)));
 				
 				//Posiçao
-            	bufView[i*11]=packageVectors[i*11];
-            	bufView[i*11+1]=packageVectors[i*11+1];
-            	bufView[i*11+2]=packageVectors[i*11+2];
+            	bufView[i*11]=packageVectors[e*11];
+            	bufView[i*11+1]=packageVectors[e*11+1];
+            	bufView[i*11+2]=packageVectors[e*11+2];
 				
 				//Rotacao
-				bufView[i*11+3]=packageVectors[i*11+3];
-            	bufView[i*11+4]=packageVectors[i*11+4];
-            	bufView[i*11+5]=packageVectors[i*11+5];
-				bufView[i*11+6]=packageVectors[i*11+6];
+				bufView[i*11+3]=packageVectors[e*11+3];
+            	bufView[i*11+4]=packageVectors[e*11+4];
+            	bufView[i*11+5]=packageVectors[e*11+5];
+				bufView[i*11+6]=packageVectors[e*11+6];
 				
 				//Escala
-				bufView[i*11+7]=packageVectors[i*11+7];
-            	bufView[i*11+8]=packageVectors[i*11+8];
-            	bufView[i*11+9]=packageVectors[i*11+9];
+				bufView[i*11+7]=packageVectors[e*11+7];
+            	bufView[i*11+8]=packageVectors[e*11+8];
+            	bufView[i*11+9]=packageVectors[e*11+9];
 				
 				//Tempo no servidor
-				bufView[i*11+10]=packageVectors[i*11+10];
+				bufView[i*11+10]=packageVectors[e*11+10];
+				
+				i++;
 				}
-            i++;
+            e++;
 		}		
 		//console.log(packageVectors.length);
 		console.log("foi");
