@@ -219,7 +219,7 @@
 			var readPackage = function () {
 				var i=0;
 				
-				while(i<uc.entities.length){
+				while(i<uc.IDs.length){
 					uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[uc.IDs[i]*11+7], uc.values[uc.IDs[i]*11+8], uc.values[uc.IDs[i]*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
 					uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[uc.IDs[i]*11], uc.values[uc.IDs[i]*11+1], uc.values[uc.IDs[i]*11+2]); //POSITION VEC3
 					uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[uc.IDs[i]*11+3], uc.values[uc.IDs[i]*11+4], uc.values[uc.IDs[i]*11+5], uc.values[uc.IDs[i]*11+6]); //ROTATION QUAT   

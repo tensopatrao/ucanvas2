@@ -125,7 +125,7 @@ io.sockets.on('connection', function (socket) {
 		
         //console.log(packageVectors.length);
 		//Cada Float32 ocupa 4 bytes
-		var bufArr = new ArrayBuffer((counter*33)*4); 
+		var bufArr = new ArrayBuffer((counter*11)*4); 
         var bufView = new Float32Array(bufArr);
 		
 		//Cada Int16 ocupa 2 bytes
