@@ -95,7 +95,7 @@ io.sockets.on('connection', function (socket) {
   
   socket.on('playerId', function(data,data2){
 	  uPlayers[parseInt(data2)]=data;
-  }
+  });
   
   socket.on('ucUpdate', function(data){
 	
