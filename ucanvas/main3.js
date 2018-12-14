@@ -141,7 +141,8 @@ io.sockets.on('connection', function (socket) {
 				if(parseInt(filter[i])===1){
 				//ID
 				
-				bufView2[i]=parseInt(packageIds[i].substring(0,4));
+				//bufView2[i]=parseInt(packageIds[i].substring(0,4));
+				bufView2[i]=i;
 				//console.log(parseInt(packageIds[i].substring(0,4)));
 				
 				//Posiçao
