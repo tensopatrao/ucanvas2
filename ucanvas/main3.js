@@ -48,7 +48,7 @@ var packageIds = [];
 var packageVectors = [];
 var packageParents = [];
 
-var uPlayers=0;
+var uPlayers= new Array(30);
 
 var unityId="yeah";
 
@@ -65,7 +65,6 @@ io.sockets.on('connection', function (socket) {
     })();*/
 
   socket.on('userInit', function(data) {
-	uPlayers+=1;
     clients[data] = {
       "socket": socket.id,
 	  "username": data
@@ -91,6 +90,12 @@ io.sockets.on('connection', function (socket) {
 		packageParents=[];
 	}
   });
+  
+  
+  
+  socket.on('playerId', function(data,data2){
+	  uPlayers[parseInt(data2)]=data;
+  }
   
   socket.on('ucUpdate', function(data){
 	
@@ -177,6 +182,13 @@ io.sockets.on('connection', function (socket) {
   			delete clients[name];
   			break;
   		}
+		var i=0;
+		while(i<uPlayers.length){
+			if(socket.id+""===uPlayers[i]){
+				io.sockets.connected[clients["UNITY-SERVER"].socket].emit('udisconnect', {id: i});		
+			}
+			i++;
+		}
   	}	
   })
 
