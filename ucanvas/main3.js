@@ -48,6 +48,8 @@ var packageIds = [];
 var packageVectors = [];
 var packageParents = [];
 
+var uPlayers=0;
+
 io.sockets.on('connection', function (socket) {
 	
 	/*(function() {
@@ -61,10 +63,10 @@ io.sockets.on('connection', function (socket) {
     })();*/
 
   socket.on('userInit', function(data) {
-	  
+	uPlayers+=1;
     clients[data] = {
       "socket": socket.id,
-	  "username": data
+	  "username": data + uPlayers
     };
 	socket.username=data;
 	socket.room = 'Lobby';
