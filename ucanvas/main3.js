@@ -79,7 +79,8 @@ io.sockets.on('connection', function (socket) {
 	
 	if(data!="UNITY-SERVER"){
 		socket.emit('welcome',packageIds, packageParents);
-		io.to(clients[unityId]).emit('newPlayer', ""+socket.id);
+		io.sockets.connected[clients["UNITY-SERVER"].socket].emit('newPlayer', ""+socket.id);
+		//io.to(clients[unityId]).emit('newPlayer', ""+socket.id);
 		console.log(unityId);
 		console.log(socket.id);
 	}
