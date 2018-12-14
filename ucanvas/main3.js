@@ -169,6 +169,7 @@ io.sockets.on('connection', function (socket) {
 		lbufArr=bufArr;
 		lbufArr2=bufArr2;
 		//console.log(packageVectors.length);
+		console.log(parseInt(filter[1]));
 		io.sockets.connected[uPlayers[parseInt(data)]].emit("ucUpdate", bufArr2, bufArr);
     } 
 	else {
