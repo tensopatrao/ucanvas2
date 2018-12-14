@@ -52,6 +52,8 @@ var uPlayers= new Array(30);
 
 var unityId="yeah";
 
+var lastPackage;
+
 io.sockets.on('connection', function (socket) {
 	
 	/*(function() {
@@ -103,20 +105,32 @@ io.sockets.on('connection', function (socket) {
 	  console.log(uPlayers[parseInt(data)]);
   });
   
+  socket.on('playerJoined', function(data,data2){
+	  io.sockets.connected[uPlayers[parseInt(data)]].emit('playerJoined', data2);
+	  console.log(uPlayers[parseInt(data)]);
+  });
   
-  socket.on('ucUpdate', function(data){
+  socket.on('playerUpdate', function(data,data2){
 	
 	//PACKAGE FORMAT: ID,POSX,POSY,POSZ,ROTX,ROTY,ROTZ,SCLX,SCLY,SCLZ | ID2,POSX2,POSY2,POSZ2,ROTX2,....
 	
-    if (clients[data]){
+	var filter=data2.split(",");
+	var b=0;
+	var counter=0;
+	while(b<filter.length){
+		if(parseInt(filter[b])=== 1){ counter+=1; }
+		b++;
+	}
+	
+    if (clients[uPlayers[parseInt(data)]){
 		
         //console.log(packageVectors.length);
 		//Cada Float32 ocupa 4 bytes
-		var bufArr = new ArrayBuffer((packageVectors.length)*4); 
+		var bufArr = new ArrayBuffer((counter)*4); 
         var bufView = new Float32Array(bufArr);
 		
 		//Cada Int16 ocupa 2 bytes
-		var bufArr2 = new ArrayBuffer((packageIds.length)*2); 
+		var bufArr2 = new ArrayBuffer((counter*11)*2); 
         var bufView2 = new Uint16Array(bufArr2);
 		
         var i = 0;
@@ -125,7 +139,7 @@ io.sockets.on('connection', function (socket) {
 		
         while(i<packageIds.length){
             //var xyz = players[i].split(",");
-				
+				if(parseInt(filter[i])===1){
 				//ID
 				
 				bufView2[i]=parseInt(packageIds[i].substring(0,4));
@@ -149,11 +163,13 @@ io.sockets.on('connection', function (socket) {
 				
 				//Tempo no servidor
 				bufView[i*11+10]=packageVectors[i*11+10];
+				}
             i++;
 		}		
-		
+		lbufArr=bufArr;
+		lbufArr2=bufArr2;
 		//console.log(packageVectors.length);
-      io.sockets.connected[clients[data].socket].emit("ucUpdate", bufArr2, bufArr);
+		io.sockets.connected[uPlayers[parseInt(data)]].emit("ucUpdate", bufArr2, bufArr);
     } 
 	else {
       //console.log("User does not exist: " + data); 

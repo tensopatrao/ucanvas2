@@ -53,6 +53,7 @@
 			
 			uc.myCam;
 			uc.myCamTarget;
+			uc.myCamTargetName;
 			
 			var socket = io.connect('wss://www.ucanvas.io:443');
 			socket.emit ('userInit', 'uCanvasClient');
@@ -80,7 +81,7 @@
 			});
 			
 			socket.on ('playerJoined', function (data) { //Server Update
-				myCamTarget=scene.getObjectByName(""+data);
+				uc.myCamTargetName=""+data;
 				console.log("PLAYER JOINED: " + data);
 			});
 			
@@ -129,6 +130,9 @@
 
 			var animate = function () {
 				requestAnimationFrame( animate );
+				
+				uc.myCam=scene.getObjectByName(uc.myCamTargetName);
+				if(uc.myCam!=null){uc.myCamTarget=uc.myCam;}
 				
 				if(uc.connected && uc.loading==0){
 					
@@ -186,8 +190,8 @@
 						//dirLight.target=camera;
 						//dirLight.position.y += 20;
 						//dirLight.position.z += 20;
-						uc.myCam.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
-						uc.myCam.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
+						camera.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
+						camera.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
 						dirLight.position.set(camera.position.x,1000,camera.position.z);
 						dirLight.target=camera;
 						
@@ -317,9 +321,13 @@
                     case "Camera":
 					
 						camera = new THREE.PerspectiveCamera( 64, window.innerWidth/window.innerHeight, 0.01, 10000 );
-						myEntity=camera;
-						uc.myCam=camera;
-						uc.myCamTarget=camera;
+						
+						var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+						var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+						myEntity = new THREE.Mesh( geometry, material );
+						myEntity.visible=false;
+						
+						if(uc.myCamTarget==null){uc.myCamTarget=myEntity;}
                         console.log("Camera created!");
                     break;
                     default:
