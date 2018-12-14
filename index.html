@@ -73,12 +73,15 @@
 			socket.on ('ucUpdate', function (data,data2) { //Server Update
 				var bufView = new Uint16Array(data);
 				var bufView2 = new Float32Array(data2);
-        
+				
+				
+				
 				uc.IDs=bufView;
+				console.log(uc.IDs);
 				uc.values=bufView2;
+				console.log(uc.values);
 				uc.wait4server=false;
 				uc.connected=true;
-				console.log("entrou");
 			});
 			
 			socket.on ('playerJoined', function (data) { //Server Update

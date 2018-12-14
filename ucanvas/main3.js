@@ -125,11 +125,11 @@ io.sockets.on('connection', function (socket) {
 		
         //console.log(packageVectors.length);
 		//Cada Float32 ocupa 4 bytes
-		var bufArr = new ArrayBuffer((counter)*4); 
+		var bufArr = new ArrayBuffer((counter*33)*4); 
         var bufView = new Float32Array(bufArr);
 		
 		//Cada Int16 ocupa 2 bytes
-		var bufArr2 = new ArrayBuffer((counter*11)*2); 
+		var bufArr2 = new ArrayBuffer((counter)*2); 
         var bufView2 = new Uint16Array(bufArr2);
 		
         var i = 0;
@@ -165,8 +165,6 @@ io.sockets.on('connection', function (socket) {
 				}
             i++;
 		}		
-		lbufArr=bufArr;
-		lbufArr2=bufArr2;
 		//console.log(packageVectors.length);
 		console.log("foi");
 		io.sockets.connected[uPlayers[parseInt(data)]].emit("ucUpdate", bufArr2, bufArr);
