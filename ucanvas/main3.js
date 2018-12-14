@@ -68,12 +68,12 @@ io.sockets.on('connection', function (socket) {
       "socket": socket.id,
 	  "username": data
     };
-	if(data!="UNITY-SERVER"){socket.username=data + uPlayers;}
+	if(data!="UNITY-SERVER"){socket.username=data;}
 	else{socket.username=data;}
 	socket.room = 'Lobby';
     socket.join('Lobby');
 	//io.sockets["in"]('Lobby').emit('updatechat', updatechatMsg('System', 'System', username + ' have connected to Lobby'));
-    console.log(socket.username + " >>> In >>> " + socket.room);
+    console.log(socket.username + "" + socket.id + " >>> In >>> " + socket.room);
 	
 	if(data!="UNITY-SERVER"){
 		socket.emit('welcome',packageIds, packageParents);
@@ -166,7 +166,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function() {
   	for(var name in clients) {
   		if(clients[name].socket === socket.id) {
-			console.log("User " + clients[name].username + " disconnected");
+			console.log("User " + name + " " + socket.id + " disconnected");
   			delete clients[name];
   			break;
   		}
