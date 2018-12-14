@@ -99,7 +99,7 @@ io.sockets.on('connection', function (socket) {
   
   
   socket.on('playerJoined', function(data,data2){
-	  io.sockets.connected[parseInt(data)].emit('playerJoined', data2);
+	  io.sockets.connected[uPlayers[parseInt(data)]].emit('playerJoined', data2);
   });
   
   
