@@ -122,7 +122,7 @@ io.sockets.on('connection', function (socket) {
 		b++;
 	}
 	
-    if (clients[uPlayers[parseInt(data)]){
+    if (clients[uPlayers[parseInt(data)]]){
 		
         //console.log(packageVectors.length);
 		//Cada Float32 ocupa 4 bytes
