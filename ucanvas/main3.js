@@ -166,7 +166,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function() {
   	for(var name in clients) {
   		if(clients[name].socket === socket.id) {
-			console.log("User " + name + " disconnected");
+			console.log("User " + clients[name].username + " disconnected");
   			delete clients[name];
   			break;
   		}
