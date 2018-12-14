@@ -80,6 +80,8 @@ io.sockets.on('connection', function (socket) {
 	if(data!="UNITY-SERVER"){
 		socket.emit('welcome',packageIds, packageParents);
 		socket.broadcast.to(unityId).emit('newPlayer', ""+socket.id);
+		console.log(unityId);
+		console.log(socket.id);
 	}
 	else{
 		unityId=socket.id;
@@ -137,7 +139,7 @@ io.sockets.on('connection', function (socket) {
             i++;
 		}		
 		
-		console.log(packageVectors.length);
+		//console.log(packageVectors.length);
       io.sockets.connected[clients[data].socket].emit("ucUpdate", bufArr2, bufArr);
     } 
 	else {
