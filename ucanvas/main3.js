@@ -113,7 +113,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('playerUpdate', function(data,data2){
 	
 	//PACKAGE FORMAT: ID,POSX,POSY,POSZ,ROTX,ROTY,ROTZ,SCLX,SCLY,SCLZ | ID2,POSX2,POSY2,POSZ2,ROTX2,....
-	
+	console.log("entrou");
 	var filter=data2.split(",");
 	var b=0;
 	var counter=0;
