@@ -113,8 +113,6 @@ io.sockets.on('connection', function (socket) {
   socket.on('playerUpdate', function(data,data2){
 	
 	//PACKAGE FORMAT: ID,POSX,POSY,POSZ,ROTX,ROTY,ROTZ,SCLX,SCLY,SCLZ | ID2,POSX2,POSY2,POSZ2,ROTX2,....
-	console.log(uPlayers[parseInt(data)]);
-	console.log(parseInt(data));
 	var filter=data2.split(",");
 	var b=0;
 	var counter=0;
@@ -122,7 +120,7 @@ io.sockets.on('connection', function (socket) {
 		if(parseInt(filter[b])=== 1){ counter+=1; }
 		b++;
 	}
-	
+	console.log(counter);
     if (io.sockets.connected[uPlayers[parseInt(data)]]){
 		
         //console.log(packageVectors.length);
@@ -170,7 +168,7 @@ io.sockets.on('connection', function (socket) {
 		lbufArr=bufArr;
 		lbufArr2=bufArr2;
 		//console.log(packageVectors.length);
-		console.log(parseInt(filter[1]));
+		console.log("foi");
 		io.sockets.connected[uPlayers[parseInt(data)]].emit("ucUpdate", bufArr2, bufArr);
     } 
 	else {
