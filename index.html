@@ -81,7 +81,7 @@
 			
 			socket.on ('playerJoined', function (data) { //Server Update
 				myCamTarget=scene.getObjectByName(""+data);
-				
+				console.log("PLAYER JOINED: " + data);
 			});
 			
 			
