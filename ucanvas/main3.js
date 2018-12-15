@@ -102,7 +102,7 @@ io.sockets.on('connection', function (socket) {
   
   socket.on('playerJoined', function(data,data2){
 	  io.sockets.connected[uPlayers[parseInt(data)]].emit('playerJoined', data2);
-	  console.log(uPlayers[parseInt(data)]);
+	  console.log("Player Joined");
   });
   
   
@@ -116,7 +116,6 @@ io.sockets.on('connection', function (socket) {
 		if(parseInt(filter[b])=== 1){ counter+=1; }
 		b++;
 	}
-	console.log(counter);
     if (io.sockets.connected[uPlayers[parseInt(data)]]){
 		
         //console.log(packageVectors.length);
@@ -165,7 +164,6 @@ io.sockets.on('connection', function (socket) {
             e++;
 		}		
 		//console.log(packageVectors.length);
-		console.log("foi");
 		io.sockets.connected[uPlayers[parseInt(data)]].emit("ucUpdate", bufArr2, bufArr);
     } 
 	else {
