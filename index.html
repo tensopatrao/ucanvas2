@@ -14,6 +14,7 @@
 		<script src="app/js/utils/SceneUtils.js"></script>
 		<script src="app/js/WebGL.js"></script>
 		<script src="app/js/socketio.js"></script>
+		<script src='app/js/threex.keyboardstate.js'></script>
 		<script>
 			THREE.ShaderLib[ 'lambert' ].fragmentShader = THREE.ShaderLib[ 'lambert' ].fragmentShader.replace(
 
@@ -32,6 +33,9 @@
 			//Connect to Server 
 
 			var uc = this;
+			
+			var keyboard	= new THREEx.KeyboardState();
+			document.addEventListener('mousemove', onDocumentMouseMove, false);
 			
 			uc.finishedLoading=false;
 			uc.loading=0;
@@ -177,7 +181,6 @@
 							//THREE.SceneUtils.attach(uc.entities[e],scene,myparent);
 						}
 						
-						
 						//uc.entities[e].position.set(uc.Pos[e].x, uc.Pos[e].y, uc.Pos[e].z);
 						//uc.entities[e].scale.set(0.01, 0.01, 0.01);
 						
@@ -196,7 +199,11 @@
 						dirLight.target=camera;
 						
 						renderer.render( scene, camera ); 
+
+						
 					}
+					
+					
 				}
 				
 			};
@@ -204,7 +211,29 @@
 			animate();
 			
 			
+			//CONTROLS
 			
+			function onDocumentMouseMove(event) {
+				event.preventDefault();
+				socket.emit('mouse', (event.clientX / window.innerWidth) * 2 - 1 , -(event.clientY / window.innerHeight) * 2 + 1);
+			}
+			
+			
+			keyboard.domElement.addEventListener('keydown', function(event){
+				if( keyboard.eventMatches(event, 'up') )	socket.emit('keydown', 1);
+				if( keyboard.eventMatches(event, 'down') )	socket.emit('keydown', 2);
+				if( keyboard.eventMatches(event, 'right') )	socket.emit('keydown', 3);
+				if( keyboard.eventMatches(event, 'left') )	socket.emit('keydown', 4);
+				if( keyboard.eventMatches(event, 'space') )	socket.emit('keydown', 5);
+			})
+
+			keyboard.domElement.addEventListener('keyup', function(event){
+				if( keyboard.eventMatches(event, 'up') )	socket.emit('keyup', 1);
+				if( keyboard.eventMatches(event, 'down') )	socket.emit('keyup', 2);
+				if( keyboard.eventMatches(event, 'right') )	socket.emit('keyup', 3);
+				if( keyboard.eventMatches(event, 'left') )	socket.emit('keyup', 4); 
+				if( keyboard.eventMatches(event, 'space') )	socket.emit('keyup', 5);				
+			})
 			
 			
 			
@@ -278,7 +307,7 @@
         
 			
 		}
-		
+
 		function uCanvasSceneLoad(){
 				var i = 0; 
     

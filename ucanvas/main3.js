@@ -107,6 +107,16 @@ io.sockets.on('connection', function (socket) {
 	  console.log("Player Joined");
   });
   
+  socket.on('mouse', function(data,data2){
+	  var i=0;
+		while(i<uPlayers.length){
+			if(socket.id+""===uPlayers[i]){
+				if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('mouse', {id: i, x: data , y: data2});}	
+			}
+			i++;
+		}
+  });
+  
   
   socket.on('playerUpdate', function(data,data2){
 	
