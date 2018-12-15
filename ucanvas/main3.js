@@ -117,6 +117,26 @@ io.sockets.on('connection', function (socket) {
 		}
   });
   
+  socket.on('keydown', function(data){
+	  var i=0;
+		while(i<uPlayers.length){
+			if(socket.id+""===uPlayers[i]){
+				if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('keydown', {id: i, key: data});}	
+			}
+			i++;
+		}
+  });
+  
+  socket.on('keyup', function(data){
+	  var i=0;
+		while(i<uPlayers.length){
+			if(socket.id+""===uPlayers[i]){
+				if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('keyup', {id: i, key: data});}	
+			}
+			i++;
+		}
+  });
+  
   
   socket.on('playerUpdate', function(data,data2){
 	
