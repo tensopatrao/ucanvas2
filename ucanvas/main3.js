@@ -170,7 +170,7 @@ io.sockets.on('connection', function (socket) {
     } 
 	else {
       console.log("User does not exist: " + data); 
-	  if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('udisconnect', {id: uPlayers[parseInt(data)]});}
+	  if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('udisconnect', {id: parseInt(data)});}
     }
   });
   
