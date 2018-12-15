@@ -62,7 +62,7 @@
 				uc.objNames=data;
 				uc.parentNames=data2;
 				
-				console.log(data);
+				//console.log(data);
 				
 				uc.Pos.push(new THREE.Vector3( 1, 1, 1 ));
 				uc.Scl.push(new THREE.Vector3( 1, 1, 1 ));
@@ -77,9 +77,9 @@
 				
 				
 				uc.IDs=bufView;
-				console.log(uc.IDs);
+				//console.log(uc.IDs);
 				uc.values=bufView2;
-				console.log(uc.values);
+				//console.log(uc.values);
 				uc.wait4server=false;
 				uc.connected=true;
 			});
@@ -152,28 +152,13 @@
 					//cube.rotation.y += 0.01;
 					var e=0;
 					var myparent=uc.entities[0];
-					while(e<uc.entities.length){
+					while(e<uc.IDs.length){
 						
-						
-						
-						if(uc.parentNames[e]=="none"){ 
-							console.log(uc.entities[e].name);
-							uc.entities[e].scale.set(-0.01*uc.Scl[e].x, 0.01*uc.Scl[e].y, 0.01*uc.Scl[e].z);
-							thisPos=uc.entities[e].position.lerp( new THREE.Vector3(uc.Pos[e].x, uc.Pos[e].y, uc.Pos[e].z),0.3 );
-						uc.entities[e].position.set(thisPos.x, thisPos.y, thisPos.z);
-						thisRot=uc.entities[e].quaternion.slerp( new THREE.Quaternion(uc.Rot[e].x,uc.Rot[e].y,uc.Rot[e].z,uc.Rot[e].w),0.3 );
-						uc.entities[e].quaternion.set(thisRot.x,thisRot.y,thisRot.z,thisRot.w);
-						}
-						else{
-							myparent=uc.entities[e].parent; 
-							uc.entities[e].scale.set(1*uc.Scl[e].x, 1*uc.Scl[e].y, 1*uc.Scl[e].z);
-							thisPos=uc.entities[e].position.lerp( new THREE.Vector3(-uc.Pos[e].x*100, uc.Pos[e].y*100, uc.Pos[e].z*100),0.3 );
-							uc.entities[e].position.set(thisPos.x, thisPos.y, thisPos.z);
-							thisRot=uc.entities[e].quaternion.slerp( new THREE.Quaternion(uc.Rot[e].x,-uc.Rot[e].y,uc.Rot[e].z,uc.Rot[e].w),0.3 );
-							uc.entities[e].quaternion.set(thisRot.x,thisRot.y,thisRot.z,thisRot.w);
-							//myparent=uc.entities[e].parent; 
-							//THREE.SceneUtils.detach(uc.entities[e],myparent,scene);
-						}
+							console.log(uc.IDs.length);
+							uc.entities[uc.IDs[e]].scale.set(-0.01*uc.Scl[uc.IDs[e]].x, 0.01*uc.Scl[uc.IDs[e]].y, 0.01*uc.Scl[uc.IDs[e]].z);
+							thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3(uc.Pos[uc.IDs[e]].x, uc.Pos[uc.IDs[e]].y, uc.Pos[uc.IDs[e]].z),0.3 );
+							uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
+							thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),0.3 );
 						
 						
 						
@@ -220,9 +205,9 @@
 				var i=0;
 				
 				while(i<uc.IDs.length){
-					uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[uc.IDs[i]*11+7], uc.values[uc.IDs[i]*11+8], uc.values[uc.IDs[i]*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
-					uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[uc.IDs[i]*11], uc.values[uc.IDs[i]*11+1], uc.values[uc.IDs[i]*11+2]); //POSITION VEC3
-					uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[uc.IDs[i]*11+3], uc.values[uc.IDs[i]*11+4], uc.values[uc.IDs[i]*11+5], uc.values[uc.IDs[i]*11+6]); //ROTATION QUAT   
+					uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
+					uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]); //POSITION VEC3
+					uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]); //ROTATION QUAT   
                 
 					i++;
 				}
@@ -243,7 +228,7 @@
 				//PRELOADER #################################################################################################################
 						while(i<uc.objNames.length){
 							
-							console.log(unique);
+							//console.log(unique);
 							
 							wasLoaded=false;
 							
@@ -309,7 +294,7 @@
 								
                         }
                         else{
-						console.log("FOUND!!!");
+						//console.log("FOUND!!!");
                             myEntity=myComparision.clone(); //Clone preloaded object     
                         }
 						
@@ -352,7 +337,7 @@
 		e=0;
 		while(e<uc.entities.length){
 			if(uc.parentNames[e]!="none"){
-				THREE.SceneUtils.attach(uc.entities[e],scene,scene.getObjectByName(uc.parentNames[e]));
+				//THREE.SceneUtils.attach(uc.entities[e],scene,scene.getObjectByName(uc.parentNames[e]));
 			}
 			e++;
 		}

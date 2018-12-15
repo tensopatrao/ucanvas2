@@ -105,10 +105,6 @@ io.sockets.on('connection', function (socket) {
 	  console.log(uPlayers[parseInt(data)]);
   });
   
-  socket.on('playerJoined', function(data,data2){
-	  io.sockets.connected[uPlayers[parseInt(data)]].emit('playerJoined', data2);
-	  console.log(uPlayers[parseInt(data)]);
-  });
   
   socket.on('playerUpdate', function(data,data2){
 	
