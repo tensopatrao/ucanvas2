@@ -152,13 +152,24 @@
 					//cube.rotation.y += 0.01;
 					var e=0;
 					var myparent=uc.entities[0];
+					while(e<uc.entities.length){
+						uc.entities[e].visible=false;
+						e++;
+					}
+					e=0;
 					while(e<uc.IDs.length){
-						
-							console.log(uc.IDs.length);
+							
+							uc.entities[uc.IDs[e]].visible=true;
+							var lerpValue=0.3;
+							var vec=new THREE.Vector3( uc.Pos[uc.IDs[e]].x-uc.entities[uc.IDs[e]].position.x, uc.Pos[uc.IDs[e]].y-uc.entities[uc.IDs[e]].position.y, uc.Pos[uc.IDs[e]].z-uc.entities[uc.IDs[e]].position.z );
+
+							if(vec.lengthSq()>1.5){
+								lerpValue=1;
+							}
 							uc.entities[uc.IDs[e]].scale.set(-0.01*uc.Scl[uc.IDs[e]].x, 0.01*uc.Scl[uc.IDs[e]].y, 0.01*uc.Scl[uc.IDs[e]].z);
-							thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3(uc.Pos[uc.IDs[e]].x, uc.Pos[uc.IDs[e]].y, uc.Pos[uc.IDs[e]].z),0.3 );
+							thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3(uc.Pos[uc.IDs[e]].x, uc.Pos[uc.IDs[e]].y, uc.Pos[uc.IDs[e]].z),lerpValue );
 							uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
-							thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),0.3 );
+							thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),lerpValue );
 						
 						
 						
@@ -289,7 +300,7 @@
                                 var geometry = new THREE.BoxGeometry( 100, 100, 100 );
 								var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 								myEntity = new THREE.Mesh( geometry, material );
-								//myEntity.visible=false;
+								myEntity.visible=false;
 								
 								
                         }

@@ -80,7 +80,9 @@ io.sockets.on('connection', function (socket) {
 	
 	if(data!="UNITY-SERVER"){
 		socket.emit('welcome',packageIds, packageParents);
-		io.sockets.connected[clients["UNITY-SERVER"].socket].emit('newPlayer', {id: socket.id});
+		if(clients["UNITY-SERVER"]){
+			io.sockets.connected[clients["UNITY-SERVER"].socket].emit('newPlayer', {id: socket.id});
+		}
 		//io.to(clients[unityId]).emit('newPlayer', ""+socket.id);
 		console.log(unityId);
 		console.log(socket.id);
@@ -168,6 +170,7 @@ io.sockets.on('connection', function (socket) {
     } 
 	else {
       console.log("User does not exist: " + data); 
+	  if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('udisconnect', {id: uPlayers[parseInt(data)]});}
     }
   });
   
@@ -203,7 +206,7 @@ io.sockets.on('connection', function (socket) {
 		var i=0;
 		while(i<uPlayers.length){
 			if(socket.id+""===uPlayers[i]){
-				io.sockets.connected[clients["UNITY-SERVER"].socket].emit('udisconnect', {id: i});		
+				if(clients["UNITY-SERVER"]){io.sockets.connected[clients["UNITY-SERVER"].socket].emit('udisconnect', {id: i});}	
 			}
 			i++;
 		}
