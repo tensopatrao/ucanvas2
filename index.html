@@ -64,8 +64,8 @@
 				
 				console.log(data);
 				
-				uc.Pos.push(new THREE.Vector3( 0, 0, 0 ));
-				uc.Scl.push(new THREE.Vector3( 0, 0, 0 ));
+				uc.Pos.push(new THREE.Vector3( 1, 1, 1 ));
+				uc.Scl.push(new THREE.Vector3( 1, 1, 1 ));
 				uc.Rot.push(new THREE.Quaternion());
 				uCanvasScenePreLoad();
 			});
@@ -140,7 +140,7 @@
 				
 				if(uc.connected && uc.loading==0){
 					
-					if(!uc.finishedLoading){ uCanvasSceneLoad(); }
+					if(!uc.finishedLoading){ uCanvasSceneLoad(); } //ISTO NAO EH CHAMADO MAIS KE UMA VEZ?
 					
 					if(!uc.wait4server){
 						readPackage();
@@ -157,7 +157,7 @@
 						
 						
 						if(uc.parentNames[e]=="none"){ 
-							
+							console.log(uc.entities[e].name);
 							uc.entities[e].scale.set(-0.01*uc.Scl[e].x, 0.01*uc.Scl[e].y, 0.01*uc.Scl[e].z);
 							thisPos=uc.entities[e].position.lerp( new THREE.Vector3(uc.Pos[e].x, uc.Pos[e].y, uc.Pos[e].z),0.3 );
 						uc.entities[e].position.set(thisPos.x, thisPos.y, thisPos.z);
