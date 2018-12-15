@@ -92,6 +92,9 @@
 			
 			var controls;
 			
+			var canMove;
+			canMove=false;
+			
 			document.addEventListener('mousemove', onMouseMove, false);
 			
 			uc.finishedLoading=false;
@@ -125,7 +128,7 @@
 			controls = new THREE.PointerLockControls( thisEntity );
 				
 				instructions.addEventListener( 'click', function () {
-					controls.lock();
+					controls.lock(); canMove=true;
 				}, false );
 				controls.addEventListener( 'lock', function () {
 					instructions.style.display = 'none';
@@ -305,27 +308,29 @@
 			
 			
 			keyboard.domElement.addEventListener('keydown', function(event){
-				if( keyboard.eventMatches(event, 'up') )	socket.emit('keydown', 1);
-				if( keyboard.eventMatches(event, 'down') )	socket.emit('keydown', 2);
-				if( keyboard.eventMatches(event, 'right') )	socket.emit('keydown', 3);
-				if( keyboard.eventMatches(event, 'left') )	socket.emit('keydown', 4);
+				if( keyboard.eventMatches(event, 'W') )	socket.emit('keydown', 1);
+				if( keyboard.eventMatches(event, 'S') )	socket.emit('keydown', 2);
+				if( keyboard.eventMatches(event, 'D') )	socket.emit('keydown', 3);
+				if( keyboard.eventMatches(event, 'A') )	socket.emit('keydown', 4);
 				if( keyboard.eventMatches(event, 'space') )	socket.emit('keydown', 5);
 			})
 
 			keyboard.domElement.addEventListener('keyup', function(event){
-				if( keyboard.eventMatches(event, 'up') )	socket.emit('keyup', 1);
-				if( keyboard.eventMatches(event, 'down') )	socket.emit('keyup', 2);
-				if( keyboard.eventMatches(event, 'right') )	socket.emit('keyup', 3);
-				if( keyboard.eventMatches(event, 'left') )	socket.emit('keyup', 4); 
+				if( keyboard.eventMatches(event, 'W') )	socket.emit('keyup', 1);
+				if( keyboard.eventMatches(event, 'S') )	socket.emit('keyup', 2);
+				if( keyboard.eventMatches(event, 'D') )	socket.emit('keyup', 3);
+				if( keyboard.eventMatches(event, 'A') )	socket.emit('keyup', 4); 
 				if( keyboard.eventMatches(event, 'space') )	socket.emit('keyup', 5);				
 			})
 			
 			
 			function onMouseMove( event ) {
+			if(canMove){
 				var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 				var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 				console.log(movementX/ renderer.domElement.width);
 				socket.emit('mouse', 1+(movementX/ renderer.domElement.width) , 1+(movementY/ renderer.domElement.height));
+				}
 			};
 			
 			
