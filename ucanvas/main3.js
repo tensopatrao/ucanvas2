@@ -103,7 +103,7 @@ io.sockets.on('connection', function (socket) {
   
   
   socket.on('playerJoined', function(data,data2){
-	  io.sockets.connected[uPlayers[parseInt(data)]].emit('playerJoined', data2);
+	  io.sockets.connected[uPlayers[parseInt(data)]].emit('playerJoined', parseInt(data)-1,data2); //SAO PRECISOS OS PARSE INTS?! TESTAR.
 	  console.log("Player Joined");
   });
   

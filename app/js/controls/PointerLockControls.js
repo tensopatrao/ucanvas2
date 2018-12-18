@@ -7,7 +7,6 @@ THREE.PointerLockControls = function ( camera, domElement ) {
 
 	var scope = this;
 
-
 	this.domElement = domElement || document.body;
 	this.isLocked = false;
 
@@ -22,21 +21,14 @@ THREE.PointerLockControls = function ( camera, domElement ) {
 
 	var PI_2 = Math.PI / 2;
 
-	/*function onMouseMove( event ) {
+	function mouse( movementX,movementY ) {
 
-		if ( scope.isLocked === false ) return;
-
-		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-		this.mouseX=movementY;
-		this.mouseY=movementY;
 		yawObject.rotation.y -= movementX * 0.002;
 		pitchObject.rotation.x -= movementY * 0.002;
 
 		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
 
-	}*/
-
+	}
 
 	function onPointerlockChange() {
 
