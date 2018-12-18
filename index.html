@@ -80,6 +80,13 @@
 		<script>
 			
 			
+			
+			
+			var scene2 = new THREE.Scene();
+			camera2 = new THREE.PerspectiveCamera( 64, window.innerWidth/window.innerHeight, 0.01, 10000 );
+			camera2.name="Camera2";
+			scene2.add(camera2);
+			
 			var scene = new THREE.Scene();
 			var camera=null;
 			var renderer = new THREE.WebGLRenderer();
@@ -118,6 +125,9 @@
 			uc.myCam;
 			uc.myCamTarget;
 			uc.myCamTargetName;
+			
+			var playerNumber=0;
+			var configured=false;
 
 				
 			var geometry = new THREE.BoxGeometry( 100, 100, 100 );
@@ -180,8 +190,9 @@
 				uc.connected=true;
 			});
 			
-			socket.on ('playerJoined', function (data) { //Server Update
-				uc.myCamTargetName=""+data;
+			socket.on ('playerJoined', function (data,data2) { //Server Update
+				uc.myCamTargetName=""+data2;
+				playerNumber=data;
 				console.log("PLAYER JOINED: " + data);
 			});
 			
@@ -236,7 +247,7 @@
 			var animate = function () {
 				requestAnimationFrame( animate );
 				
-				uc.myCam=scene.getObjectByName(uc.myCamTargetName); //MELHORAR
+				uc.myCam=scene.getObjectByName(uc.myCamTargetName); //MELHORAR, ISTO EH HORRIVEL
 				if(uc.myCam!=null){uc.myCamTarget=uc.myCam;}
 				
 				if(uc.connected && uc.loading==0){
@@ -269,27 +280,19 @@
 								lerpValue=1;
 							}
 							
-							if(uc.parentNames[uc.IDs[e]]=="none"){ 
-								uc.entities[uc.IDs[e]].scale.set(-0.01*uc.Scl[uc.IDs[e]].x, 0.01*uc.Scl[uc.IDs[e]].y, 0.01*uc.Scl[uc.IDs[e]].z);
-								thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3(uc.Pos[uc.IDs[e]].x, uc.Pos[uc.IDs[e]].y, uc.Pos[uc.IDs[e]].z),lerpValue );
-								uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
-								thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),lerpValue );
-							}
-							else{
-								myparent=uc.entities[uc.IDs[e]].parent;
-								uc.entities[uc.IDs[e]].scale.set(uc.Scl[uc.IDs[e]].x, uc.Scl[uc.IDs[e]].y, uc.Scl[uc.IDs[e]].z);
-								thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3((uc.Pos[uc.IDs[e]].x+(uc.Pos[uc.IDs[e]].x-myparent.position.x))*10000*myparent.scale.x, (uc.Pos[uc.IDs[e]].y+(uc.Pos[uc.IDs[e]].y-myparent.position.y))*10000*myparent.scale.y, (uc.Pos[uc.IDs[e]].z+(uc.Pos[uc.IDs[e]].z-myparent.position.z))*10000*myparent.scale.z),lerpValue );
-								uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
-								thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),lerpValue );
-								console.log(uc.entities[uc.IDs[e]].position);
-								console.log(myparent.position);
-								console.log("------------");
+							uc.entities[uc.IDs[e]].scale.set(-0.01*uc.Scl[uc.IDs[e]].x, 0.01*uc.Scl[uc.IDs[e]].y, 0.01*uc.Scl[uc.IDs[e]].z);
+							thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3(uc.Pos[uc.IDs[e]].x, uc.Pos[uc.IDs[e]].y, uc.Pos[uc.IDs[e]].z),lerpValue );
+							uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
+							thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),lerpValue );
+							if(!configured){
+								if(playerNumber==uc.Scl[uc.IDs[e]].w){ 
+									scene2.add(uc.entities[uc.IDs[e]]); 
+								}
 							}
 						
-						
-						if(uc.parentNames[e]!="none"){ 
+						//if(uc.parentNames[e]!="none"){ 
 							//THREE.SceneUtils.attach(uc.entities[e],scene,myparent);
-						}
+						//}
 						
 						//uc.entities[e].position.set(uc.Pos[e].x, uc.Pos[e].y, uc.Pos[e].z);
 						//uc.entities[e].scale.set(0.01, 0.01, 0.01);
@@ -297,11 +300,12 @@
 						e++;
 					}
 					//camera.scale.set(1,1,1);
-					
+					configured=true;
 					if(camera!=null){
 						yawObject.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
 						//yawObject.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z+404);
-						//camera.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
+						camera2.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
+						camera2.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
 						dirLight.position.set(camera.position.x,1000,camera.position.z);
 						dirLight.target=camera;
 						
@@ -310,7 +314,7 @@
 						renderer.clear();
 						renderer.render( scene, camera );
 						renderer.clearDepth();
-						//renderer.render( scene2, camera );
+						renderer.render( scene2, camera );
 						
 					}
 					
