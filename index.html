@@ -285,8 +285,8 @@
 							if(vec.lengthSq()>5.5){
 								lerpValue=1;
 							}
-							
-							uc.entities[uc.IDs[e]].scale.set(-0.01*uc.Scl[uc.IDs[e]].x, 0.01*uc.Scl[uc.IDs[e]].y, 0.01*uc.Scl[uc.IDs[e]].z);
+							var thisScl=uc.entities[uc.IDs[e]].scale.lerp( new THREE.Vector3(-0.01*uc.Scl[uc.IDs[e]].x, 0.01*uc.Scl[uc.IDs[e]].y, 0.01*uc.Scl[uc.IDs[e]].z),0.7 );
+							uc.entities[uc.IDs[e]].scale.set(thisScl.x, thisScl.y, thisScl.z);
 							thisPos=uc.entities[uc.IDs[e]].position.lerp( new THREE.Vector3(uc.Pos[uc.IDs[e]].x, uc.Pos[uc.IDs[e]].y, uc.Pos[uc.IDs[e]].z),lerpValue );
 							uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
 							thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),lerpValue );
@@ -313,6 +313,15 @@
 										sight.position.set(0,-0.05,0);
 										sight.position.z+=-1;
 									}
+									else if(thisName=="Muzzle3d3"){
+										var object=uc.entities[uc.IDs[e]];
+										object.mixer = new THREE.AnimationMixer( object );
+										mixers.push( object.mixer );
+										var action = object.mixer.clipAction( object.animations[ 0 ] );
+										action.setLoop( THREE.Loop )
+										action.play();
+									}
+									
 								}
 							}
 						
@@ -645,10 +654,6 @@
 					//thismaterial.defines.CUSTOM = "";
 					
 					loader.load( "app/models/" + assetName + ".fbx", function ( object ) {
-						/*object.mixer = new THREE.AnimationMixer( object );
-						mixers.push( object.mixer );
-						var action = object.mixer.clipAction( object.animations[ 0 ] );
-						action.play();*/
 						var xupa=new THREE.MeshBasicMaterial();
 						xupa.map=texture;
 						object.traverse( function ( child ) {
