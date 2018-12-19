@@ -79,11 +79,11 @@
 		</script>
 		<script>
 			
-			
+			var FPS=true;
 			
 			
 			var scene2 = new THREE.Scene();
-			camera2 = new THREE.PerspectiveCamera( 64, window.innerWidth/window.innerHeight, 0.01, 10000 );
+			var camera2 = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.01, 10000 );
 			camera2.name="Camera2";
 			scene2.add(camera2);
 			
@@ -121,6 +121,7 @@
 			uc.Pos=[];
 			uc.Scl=[];
 			uc.Rot=[];
+			uc.Extra=[];
 			
 			uc.myCam;
 			uc.myCamTarget;
@@ -130,17 +131,18 @@
 			var configured=false;
 
 				
-			var geometry = new THREE.BoxGeometry( 100, 100, 100 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			var thisEntity = new THREE.Mesh( geometry, material );
-			thisEntity.visible=false;
+			//var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+			//var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			
-			var yawObject;
-			//var pitchObject = new THREE.Mesh( new THREE.BoxGeometry( 1, 1, 1 ),new THREE.MeshBasicMaterial( { color: 0x00ff00 } ) );
+			//FPS SPECIFIC CODE
+			var thisEntity = new THREE.Object3D();
+			var sight ;
 			var pitchObject = new THREE.Object3D();
 			var yawObject = new THREE.Object3D();
 			yawObject.add( pitchObject );
 			scene.add( yawObject );
+			
+			var FPScam;
 
 			var PI_2 = Math.PI / 2;
 			
@@ -159,7 +161,10 @@
 					instructions.style.display = '';
 				} );
 				
+			var mouseButtons = { LEFT: THREE.MOUSE.LEFT, MIDDLE: THREE.MOUSE.MIDDLE, RIGHT: THREE.MOUSE.RIGHT };
 			
+			document.addEventListener( 'mousedown', onMouseDown, false );
+			document.addEventListener( 'mouseup', onMouseUp, false );
 			
 			var socket = io.connect('wss://www.ucanvas.io:443');
 			socket.emit ('userInit', 'uCanvasClient');
@@ -173,6 +178,7 @@
 				uc.Pos.push(new THREE.Vector3( 1, 1, 1 ));
 				uc.Scl.push(new THREE.Vector3( 1, 1, 1 ));
 				uc.Rot.push(new THREE.Quaternion());
+				uc.Extra.push(0);
 				uCanvasScenePreLoad();
 			});
     
@@ -276,7 +282,7 @@
 							var lerpValue=0.3;
 							
 							var vec=new THREE.Vector3( uc.Pos[uc.IDs[e]].x-uc.entities[uc.IDs[e]].position.x, uc.Pos[uc.IDs[e]].y-uc.entities[uc.IDs[e]].position.y, uc.Pos[uc.IDs[e]].z-uc.entities[uc.IDs[e]].position.z );
-							if(vec.lengthSq()>1.5){
+							if(vec.lengthSq()>5.5){
 								lerpValue=1;
 							}
 							
@@ -285,8 +291,28 @@
 							uc.entities[uc.IDs[e]].position.set(thisPos.x, thisPos.y, thisPos.z);
 							thisRot=uc.entities[uc.IDs[e]].quaternion.slerp( new THREE.Quaternion(uc.Rot[uc.IDs[e]].x,uc.Rot[uc.IDs[e]].y,uc.Rot[uc.IDs[e]].z,uc.Rot[uc.IDs[e]].w),lerpValue );
 							if(!configured){
-								if(playerNumber==uc.Scl[uc.IDs[e]].w){ 
-									scene2.add(uc.entities[uc.IDs[e]]); 
+								
+								if(playerNumber==uc.Extra[uc.IDs[e]]){ 
+									console.log(uc.entities[uc.IDs[e]].name.substring(5,uc.entities[uc.IDs[e]].name.length));
+									scene2.add(uc.entities[uc.IDs[e]]);
+									var thisName=uc.entities[uc.IDs[e]].name.substring(5,uc.entities[uc.IDs[e]].name.length);
+									if(thisName=="HEAD"){
+										scene2.remove(uc.entities[uc.IDs[e]]);
+										scene.remove(uc.entities[uc.IDs[e]]);
+									}
+									else if(thisName=="TORSO"){
+										scene2.remove(uc.entities[uc.IDs[e]]);
+										scene.remove(uc.entities[uc.IDs[e]]);
+									}
+									else if(thisName=="CameraFPS"){
+										FPScam=uc.entities[uc.IDs[e]];
+										var geometry = new THREE.BoxGeometry( 0.005, 0.005, 0.005 );
+										var material = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+										sight = new THREE.Mesh(geometry,material);
+										pitchObject.add(sight);
+										sight.position.set(0,-0.05,0);
+										sight.position.z+=-1;
+									}
 								}
 							}
 						
@@ -302,7 +328,7 @@
 					//camera.scale.set(1,1,1);
 					configured=true;
 					if(camera!=null){
-						yawObject.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
+						if(FPScam!=null){yawObject.position.set(FPScam.position.x,FPScam.position.y,FPScam.position.z);}
 						//yawObject.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z+404);
 						camera2.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
 						camera2.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
@@ -314,7 +340,7 @@
 						renderer.clear();
 						renderer.render( scene, camera );
 						renderer.clearDepth();
-						renderer.render( scene2, camera );
+						renderer.render( scene2, camera2 );
 						
 					}
 					
@@ -334,6 +360,8 @@
 				if( keyboard.eventMatches(event, 'D') )	socket.emit('keydown', 3);
 				if( keyboard.eventMatches(event, 'A') )	socket.emit('keydown', 4);
 				if( keyboard.eventMatches(event, 'space') )	socket.emit('keydown', 5);
+				if( keyboard.eventMatches(event, 'shift') )	 socket.emit('keydown', 6);
+				if( keyboard.eventMatches(event, 'R') )	socket.emit('keydown', 7);
 			})
 
 			keyboard.domElement.addEventListener('keyup', function(event){
@@ -341,7 +369,9 @@
 				if( keyboard.eventMatches(event, 'S') )	socket.emit('keyup', 2);
 				if( keyboard.eventMatches(event, 'D') )	socket.emit('keyup', 3);
 				if( keyboard.eventMatches(event, 'A') )	socket.emit('keyup', 4); 
-				if( keyboard.eventMatches(event, 'space') )	socket.emit('keyup', 5);				
+				if( keyboard.eventMatches(event, 'space') )	socket.emit('keyup', 5);
+				if( keyboard.eventMatches(event, 'lshift') ) console.log("deu");	socket.emit('keyup', 6);
+				if( keyboard.eventMatches(event, 'R') )	socket.emit('keyup', 7);
 			})
 			
 			
@@ -350,8 +380,8 @@
 				
 				var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 				var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-				yawObject.rotation.y -= movementX * 0.002;
-				pitchObject.rotation.x -= movementY * 0.002;
+				yawObject.rotation.y -= movementX * 0.001;
+				pitchObject.rotation.x -= movementY * 0.001;
 				while(yawObject.rotation.y>PI_2*2){
 					yawObject.rotation.y-=PI_2*4;
 				}
@@ -371,6 +401,66 @@
 				
 			};
 			
+			function onMouseDown( event ) {
+
+
+				event.preventDefault();
+
+				switch ( event.button ) {
+
+					case mouseButtons.LEFT:
+						if(FPS){socket.emit('mouse', 5+yawObject.rotation.y  , 5+pitchObject.rotation.x);}
+						socket.emit('keydown', 8);
+
+					break;
+
+					case mouseButtons.MIDDLE:
+
+				
+
+					break;
+
+					case mouseButtons.RIGHT:
+				
+						socket.emit('keydown', 9);
+
+					break;
+
+				}
+
+
+			}	
+			
+			function onMouseUp( event ) {
+
+
+				event.preventDefault();
+
+				switch ( event.button ) {
+
+					case mouseButtons.LEFT:
+
+						socket.emit('keyup', 8);
+
+					break;
+
+					case mouseButtons.MIDDLE:
+
+						
+
+					break;
+
+					case mouseButtons.RIGHT:
+				
+						socket.emit('keyup', 9);
+
+					break;
+
+				}
+
+
+			}	
+			
 			
 			//FUNCTIONS
 			
@@ -381,7 +471,7 @@
 					uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
 					uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]); //POSITION VEC3
 					uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]); //ROTATION QUAT   
-                
+					uc.Extra[uc.IDs[i]]=uc.values[i*11+10];
 					i++;
 				}
 								
@@ -459,9 +549,9 @@
                         
                         if(myComparision==null){
 								
-                                var geometry = new THREE.BoxGeometry( 100, 100, 100 );
-								var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-								myEntity = new THREE.Mesh( geometry, material );
+                                //var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+								//var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+								myEntity = new THREE.Object3D();
 								myEntity.visible=false;
 								
 								
@@ -496,6 +586,14 @@
 						
 						
                         console.log("Camera created!");
+                    break;
+					
+					 case "Cube":
+						
+						var geometry2 = new THREE.BoxGeometry( 100, 100, 100 );
+						var material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+						myEntity= new THREE.Mesh( geometry2, material2);
+						
                     break;
                     default:
                     break;

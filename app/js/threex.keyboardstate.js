@@ -83,7 +83,8 @@ THREEx.KeyboardState.ALIAS	= {
 	'pageup'	: 33,
 	'pagedown'	: 34,
 	'tab'		: 9,
-	'escape'	: 27
+	'escape'	: 27,
+	'shift'     : 16
 };
 
 /**
