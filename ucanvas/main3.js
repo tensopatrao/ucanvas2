@@ -56,7 +56,7 @@ var lastPackage;
 
 io.sockets.on('connection', function (socket) {
 	
-	(function() {
+	/*(function() {
         var oldEmit = socket.emit;
         socket.emit = function() {
             var args = Array.from(arguments);
@@ -64,7 +64,7 @@ io.sockets.on('connection', function (socket) {
                 oldEmit.apply(this, args);
             }, Math.random()*100); 
         };
-    })();
+    })();*/
 
   socket.on('userInit', function(data) {
     clients[data] = {
