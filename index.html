@@ -83,6 +83,7 @@
 			
 			
 			var scene2 = new THREE.Scene();
+			//var scene3 = new THREE.Scene();
 			var camera2 = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.01, 10000 );
 			camera2.name="Camera2";
 			scene2.add(camera2);
@@ -216,7 +217,8 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 			renderer.shadowMap.enabled = true;
-			//renderer.shadowMap.type = THREE.BasicShadowMap;; 
+			//renderer.shadowMap.type =THREE.PCFSoftShadowMap;
+			renderer.shadowMap.type = THREE.BasicShadowMap;
 			renderer.autoClear = false;
 			var light = new THREE.AmbientLight(0xffffff,1 ); // soft white light
 			light.castShadow=false;
@@ -230,31 +232,31 @@
 				dirLight.castShadow=true;
 				scene.add( dirLight );
 								dirLight.castShadow = true;
-				dirLight.shadow.mapSize.width = 2048;
-				dirLight.shadow.mapSize.height = 2048;
-				var d = 20;
+				dirLight.shadow.mapSize.width = 512;
+				dirLight.shadow.mapSize.height = 512;
+				var d = 15;
 				dirLight.shadow.camera.left = - d;
 				dirLight.shadow.camera.right = d;
 				dirLight.shadow.camera.top = d;
 				dirLight.shadow.camera.bottom = - d;
 				dirLight.shadow.camera.far = 1000;
-				dirLight.shadow.bias = - 0.00001;
+				dirLight.shadow.bias = - 0.0006;
 				
-				dirLight2 = new THREE.DirectionalLight( 0xffffff, 0.2 );
+				/*dirLight2 = new THREE.DirectionalLight( 0xffffff, 0.2 );
 				dirLight2.position.set( 0, 1, 0 );
 				dirLight2.position.multiplyScalar( 30 );
-				dirLight2.castShadow=true;
+				dirLight2.castShadow=false;
 				scene.add( dirLight2 );
 								dirLight2.castShadow = true;
 				dirLight2.shadow.mapSize.width = 256;
 				dirLight2.shadow.mapSize.height = 256;
-				d = 1;
+				d = 3;
 				dirLight2.shadow.camera.left = - d;
 				dirLight2.shadow.camera.right = d;
 				dirLight2.shadow.camera.top = d;
 				dirLight2.shadow.camera.bottom = - d;
 				dirLight2.shadow.camera.far = 1000;
-				dirLight2.shadow.bias = - 0.000001;
+				dirLight2.shadow.bias = - 0.0006;*/
 				//dirLight.shadow.camera.position.set(dirLight.shadow.camera.position.x,dirLight.shadow.camera.position.y-20,dirLight.shadow.camera.position.z);
 			
 			function onWindowResize() {
@@ -290,7 +292,7 @@
 					
 					
 					while(e<uc.entities.length){
-						uc.entities[e].visible=false;
+						//uc.entities[e].visible=false;
 						e++;
 					}
 					e=0;
@@ -358,14 +360,16 @@
 						//yawObject.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z+404);
 						camera2.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
 						camera2.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
-						dirLight.position.set(camera.position.x,1000,camera.position.z);
+						dirLight.position.set(camera.position.x,1000,camera.position.z+50);
 						dirLight.target=camera;
-						dirLight2.position.set(camera.position.x,1000,camera.position.z);
-						dirLight2.target=camera;
+						//dirLight2.position.set(camera.position.x,1000,camera.position.z+50);
+						//dirLight2.target=camera;
 						
 						//renderer.render( scene, camera ); 
 
 						renderer.clear();
+						//renderer.render( scene3, camera );
+						//renderer.clearDepth();
 						renderer.render( scene, camera );
 						renderer.clearDepth();
 						renderer.render( scene2, camera2 );
@@ -609,12 +613,21 @@
 						yawObject.position.set(camera.position.x,camera.position.x,camera.position.z);
 						pitchObject.add(camera);
 						
-				
+						uc.entities.push(myEntity);
+						scene.add(myEntity);
 						
 						
 						
                         console.log("Camera created!");
                     break;
+					
+					case "SKYBOXFPS":
+					
+						scene.add(myEntity);
+						myEntity.name=uc.objNames[i];
+						uc.entities.push(myEntity);
+					
+					break;
 					
 					 case "Cube":
 						
@@ -622,12 +635,16 @@
 						var material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 						myEntity= new THREE.Mesh( geometry2, material2);
 						
+						uc.entities.push(myEntity);
+						scene.add(myEntity);
+						
                     break;
                     default:
+						uc.entities.push(myEntity);
+						scene.add(myEntity);
                     break;
                 }
-				uc.entities.push(myEntity);
-				scene.add(myEntity);
+				
             //###################################################################################################################################
             i++;
 		}
@@ -671,19 +688,81 @@
 					var thismaterial = new THREE.MeshLambertMaterial();
 					thismaterial.defines = thismaterial.defines || {};
 					thismaterial.defines.CUSTOM = "";
-					
+					thismaterial.shadowSide = THREE.FrontSide;
 					loader.load( "app/models/" + assetName + ".fbx", function ( object ) {
 						var xupa=new THREE.MeshBasicMaterial();
 						thismaterial.map=texture;
 						xupa.map=texture;
+						
 						object.traverse( function ( child ) {
 							if ( child.isMesh ) {
-								child.castShadow = false;
-								child.receiveShadow = false;
+								switch(assetName){
+									
+									case "SKYBOXFPS":
+										child.castShadow = false;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "RFOOT":
+										child.castShadow = true;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "LFOOT":
+										child.castShadow = true;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "TORSO":
+										child.castShadow = true;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "HEAD":
+										child.castShadow = false;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "LHAND":
+										child.castShadow = false;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "handgun":
+										child.castShadow = false;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "sight":
+										child.castShadow = false;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+									
+									case "3dmuzzle":
+										child.castShadow = false;
+										child.receiveShadow = false;
+										child.material=xupa;
+									break;
+								
+									default:
+										child.castShadow = false;
+										child.receiveShadow = true;
+										child.material=xupa;
+									break;
+								}
+								
 								
 								//xupa.color=child.material.color;
 								//xupa.map=child.material.map;
-								child.material=xupa;
+								
 								//xupa.copy(child.material);
 								//child.material=xupa;
 								//child.material.lights=false;
