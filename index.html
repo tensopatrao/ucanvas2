@@ -103,6 +103,8 @@
 			var canMove;
 			canMove=false;
 			
+			var pressedKeys=[false,false,false,false,false,false,false,false,false,false];
+			
 			//document.addEventListener('mousemove', onMouseMove, false);
 			
 			uc.finishedLoading=false;
@@ -226,7 +228,7 @@
 			
 			window.addEventListener( 'resize', onWindowResize, false );
 			
-			dirLight = new THREE.DirectionalLight( 0xffffff, 0.2 );
+			/*dirLight = new THREE.DirectionalLight( 0xffffff, 0.2 );
 				dirLight.position.set( 0, 1, 0 );
 				dirLight.position.multiplyScalar( 30 );
 				dirLight.castShadow=true;
@@ -242,7 +244,7 @@
 				dirLight.shadow.camera.far = 1000;
 				dirLight.shadow.bias = - 0.0006;
 				
-				/*dirLight2 = new THREE.DirectionalLight( 0xffffff, 0.2 );
+				dirLight2 = new THREE.DirectionalLight( 0xffffff, 0.2 );
 				dirLight2.position.set( 0, 1, 0 );
 				dirLight2.position.multiplyScalar( 30 );
 				dirLight2.castShadow=false;
@@ -360,8 +362,8 @@
 						//yawObject.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z+404);
 						camera2.position.set(uc.myCamTarget.position.x,uc.myCamTarget.position.y,uc.myCamTarget.position.z);
 						camera2.rotation.set(uc.myCamTarget.rotation.x,uc.myCamTarget.rotation.y,uc.myCamTarget.rotation.z,uc.myCamTarget.rotation.w);
-						dirLight.position.set(camera.position.x,1000,camera.position.z+50);
-						dirLight.target=camera;
+						//dirLight.position.set(camera.position.x,1000,camera.position.z+50);
+						//dirLight.target=camera;
 						//dirLight2.position.set(camera.position.x,1000,camera.position.z+50);
 						//dirLight2.target=camera;
 						
@@ -387,23 +389,23 @@
 			//CONTROLS
 			
 			keyboard.domElement.addEventListener('keydown', function(event){
-				if( keyboard.eventMatches(event, 'W') )	socket.emit('keydown', 1);
-				if( keyboard.eventMatches(event, 'S') )	socket.emit('keydown', 2);
-				if( keyboard.eventMatches(event, 'D') )	socket.emit('keydown', 3);
-				if( keyboard.eventMatches(event, 'A') )	socket.emit('keydown', 4);
-				if( keyboard.eventMatches(event, 'space') )	socket.emit('keydown', 5);
-				if( keyboard.eventMatches(event, 'shift') )	 socket.emit('keydown', 6);
-				if( keyboard.eventMatches(event, 'R') )	socket.emit('keydown', 7);
+				if( keyboard.eventMatches(event, 'W') )	if(!pressedKeys[0]){ socket.emit('keydown', 1); pressedKeys[0]=true; }
+				if( keyboard.eventMatches(event, 'S') )	if(!pressedKeys[1]){ socket.emit('keydown', 2); pressedKeys[1]=true; }
+				if( keyboard.eventMatches(event, 'D') )	if(!pressedKeys[2]){ socket.emit('keydown', 3); pressedKeys[2]=true; }
+				if( keyboard.eventMatches(event, 'A') )	if(!pressedKeys[3]){ socket.emit('keydown', 4); pressedKeys[3]=true; }
+				if( keyboard.eventMatches(event, 'space') )	if(!pressedKeys[4]){ socket.emit('keydown', 5); pressedKeys[4]=true; }
+				if( keyboard.eventMatches(event, 'shift') )	 socket.emit('keydown', 6); pressedKeys[5]=true; 
+				if( keyboard.eventMatches(event, 'R') )	if(!pressedKeys[6]){ socket.emit('keydown', 7); pressedKeys[6]=true; }
 			})
 
 			keyboard.domElement.addEventListener('keyup', function(event){
-				if( keyboard.eventMatches(event, 'W') )	socket.emit('keyup', 1);
-				if( keyboard.eventMatches(event, 'S') )	socket.emit('keyup', 2);
-				if( keyboard.eventMatches(event, 'D') )	socket.emit('keyup', 3);
-				if( keyboard.eventMatches(event, 'A') )	socket.emit('keyup', 4); 
-				if( keyboard.eventMatches(event, 'space') )	socket.emit('keyup', 5);
-				if( keyboard.eventMatches(event, 'lshift') ) console.log("deu");	socket.emit('keyup', 6);
-				if( keyboard.eventMatches(event, 'R') )	socket.emit('keyup', 7);
+				if( keyboard.eventMatches(event, 'W') )	if(pressedKeys[0]){ socket.emit('keyup', 1); pressedKeys[0]=false; }
+				if( keyboard.eventMatches(event, 'S') )	if(pressedKeys[1]){ socket.emit('keyup', 2); pressedKeys[1]=false; }
+				if( keyboard.eventMatches(event, 'D') )	if(pressedKeys[2]){ socket.emit('keyup', 3); pressedKeys[2]=false; }
+				if( keyboard.eventMatches(event, 'A') )	if(pressedKeys[3]){ socket.emit('keyup', 4); pressedKeys[3]=false; }
+				if( keyboard.eventMatches(event, 'space') )	if(pressedKeys[4]){ socket.emit('keyup', 5); pressedKeys[4]=false; }
+				if( keyboard.eventMatches(event, 'shift') )	 if(pressedKeys[5]){ socket.emit('keyup', 6); pressedKeys[5]=false; }
+				if( keyboard.eventMatches(event, 'R') )	if(pressedKeys[6]){ socket.emit('keyup', 7); pressedKeys[6]=false; }
 			})
 			
 			

@@ -163,7 +163,7 @@ io.sockets.on('connection', function (socket) {
 		var e = 0;
 
 		
-        while(e<packageIds.length){
+        while(e<packageVectors.length/11){
             //var xyz = players[i].split(",");
 				if(parseInt(filter[e])===1){
 				//ID
@@ -216,8 +216,8 @@ io.sockets.on('connection', function (socket) {
 		socket.to(socket.room).emit("effect", bufArr2);
   });
   
-    socket.on('setPackageValue', function(data,data2){
-		setPackageValue(data,data2);
+    socket.on('setPackageValue', function(data){
+		setPackageValue(data);
   });
   
   socket.on('addPackageValue', function(data){
@@ -264,12 +264,11 @@ function setPackageValue2(value, id){
 	//console.log(packageVectors);
 }
 
-function setPackageValue(value, id){
+function setPackageValue(value){
 	var xy = value.split(",");
-	var yz = id.split(",");
 	var i=0;
-	for(var cc in yz) {
-  		setPackageValue2(xy[i],cc);
+	while(i<xy.length){
+  		if(xy[i]!=""){setPackageValue2(xy[i],i);}
 		i++;
   	}
 	//console.log(packageVectors);
