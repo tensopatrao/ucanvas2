@@ -181,9 +181,11 @@
 				
 				uc.Pos.push(new THREE.Vector3( 1, 1, 1 ));
 				uc.Scl.push(new THREE.Vector3( 1, 1, 1 ));
+				console.log(uc.Pos);
 				uc.Rot.push(new THREE.Quaternion());
 				uc.Extra.push(0);
 				uCanvasScenePreLoad();
+				uc.connected=true;
 			});
     
 			socket.on ('ucUpdate', function (data,data2) { //Server Update
@@ -197,7 +199,7 @@
 				uc.values=bufView2;
 				//console.log(uc.values);
 				uc.wait4server=false;
-				uc.connected=true;
+				
 			});
 			
 			socket.on ('playerJoined', function (data,data2) { //Server Update
@@ -215,12 +217,12 @@
 			//Start Three.js and create Scene
 			
 			
-			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setPixelRatio(1);
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
-			renderer.shadowMap.enabled = true;
+			//renderer.shadowMap.enabled = true;
 			//renderer.shadowMap.type =THREE.PCFSoftShadowMap;
-			renderer.shadowMap.type = THREE.BasicShadowMap;
+			//renderer.shadowMap.type = THREE.BasicShadowMap;
 			renderer.autoClear = false;
 			var light = new THREE.AmbientLight(0xffffff,1 ); // soft white light
 			light.castShadow=false;
@@ -274,14 +276,16 @@
 			var animate = function () {
 				requestAnimationFrame( animate );
 				
-				uc.myCam=scene.getObjectByName(uc.myCamTargetName); //MELHORAR, ISTO EH HORRIVEL
 				if(uc.myCam!=null){uc.myCamTarget=uc.myCam;}
+				else{
+					uc.myCam=scene.getObjectByName(uc.myCamTargetName);
+				}
 				
 				if(uc.connected && uc.loading==0){
 					
 					if(!uc.finishedLoading){ uCanvasSceneLoad(); } //ISTO NAO EH CHAMADO MAIS KE UMA VEZ?
 					
-					if(!uc.wait4server){
+					else if(!uc.wait4server){
 						readPackage();
 						uc.wait4server=true;
 					}
@@ -299,6 +303,7 @@
 					}
 					e=0;
 					while(e<uc.IDs.length){
+
 							uc.entities[uc.IDs[e]].visible=true;
 							var lerpValue=0.3;
 							
@@ -344,7 +349,7 @@
 									}
 									
 								}
-							}
+							
 						
 						//if(uc.parentNames[e]!="none"){ 
 							//THREE.SceneUtils.attach(uc.entities[e],scene,myparent);
@@ -352,7 +357,7 @@
 						
 						//uc.entities[e].position.set(uc.Pos[e].x, uc.Pos[e].y, uc.Pos[e].z);
 						//uc.entities[e].scale.set(0.01, 0.01, 0.01);
-						
+						}
 						e++;
 					}
 					//camera.scale.set(1,1,1);
@@ -502,14 +507,38 @@
 				var i=0;
 				
 				while(i<uc.IDs.length){
-					uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
-					uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]); //POSITION VEC3
-					uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]); //ROTATION QUAT   
+					//uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
+					//uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]); //POSITION VEC3
+					//uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]); //ROTATION QUAT   
 					uc.Extra[uc.IDs[i]]=uc.values[i*11+10];
 					i++;
 				}
 								
 			};
+			
+			
+			/*var readPackage = function () {
+				var i=0;
+				var thisVector=new THREE.Vector3(1,1,1);
+				var thisQuat=new THREE.Quaternion(1,1,1,1);
+				
+				while(i<uc.IDs.length){
+					thisVector=uc.Scl[uc.IDs[i]];
+					thisVector.set(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]);
+					uc.Scl[uc.IDs[i]]=thisVector; //SCALE VEC3 + SERVER TIME FLOAT
+					
+					thisVector=uc.Pos[uc.IDs[i]];
+					thisVector.set(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]);
+					uc.Pos[uc.IDs[i]]=thisVector;
+					
+					thisQuat=uc.Rot[uc.IDs[i]];
+					thisQuat.set(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]);
+					uc.Rot[uc.IDs[i]]=thisQuat; //ROTATION QUAT   
+					uc.Extra[uc.IDs[i]]=uc.values[i*11+10];
+					i++;
+				}
+								
+			};*/
 			
 			function uCanvasScenePreLoad(){
 				var i = 0; 
