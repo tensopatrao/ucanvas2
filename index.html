@@ -185,7 +185,7 @@
 				uc.Rot.push(new THREE.Quaternion());
 				uc.Extra.push(0);
 				uCanvasScenePreLoad();
-				uc.connected=true;
+				
 			});
     
 			socket.on ('ucUpdate', function (data,data2) { //Server Update
@@ -199,7 +199,7 @@
 				uc.values=bufView2;
 				//console.log(uc.values);
 				uc.wait4server=false;
-				
+				uc.connected=true;
 			});
 			
 			socket.on ('playerJoined', function (data,data2) { //Server Update
@@ -507,9 +507,9 @@
 				var i=0;
 				
 				while(i<uc.IDs.length){
-					//uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
-					//uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]); //POSITION VEC3
-					//uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]); //ROTATION QUAT   
+					uc.Scl[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11+7], uc.values[i*11+8], uc.values[i*11+9]); //SCALE VEC3 + SERVER TIME FLOAT
+					uc.Pos[uc.IDs[i]]=new THREE.Vector3(uc.values[i*11], uc.values[i*11+1], uc.values[i*11+2]); //POSITION VEC3
+					uc.Rot[uc.IDs[i]]=new THREE.Quaternion(uc.values[i*11+3], uc.values[i*11+4], uc.values[i*11+5], uc.values[i*11+6]); //ROTATION QUAT   
 					uc.Extra[uc.IDs[i]]=uc.values[i*11+10];
 					i++;
 				}
